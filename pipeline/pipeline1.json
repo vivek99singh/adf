@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy",
+				"name": "Copy_from_blob_db",
 				"description": "Copy data from blob storage to database",
 				"type": "Copy",
 				"dependsOn": [],
@@ -147,6 +147,155 @@
 				"outputs": [
 					{
 						"referenceName": "AzureSqlTable1",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Copy_from_blob_db",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "dbo.cars"
+					},
+					{
+						"name": "Destination",
+						"value": "test//"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00"
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Car",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Car",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "MPG",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "MPG",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "Cylinders",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "Cylinders",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Displacement",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "Displacement",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "Horsepower",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "Horsepower",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "Weight",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "Weight",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "Acceleration",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "Acceleration",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "Model",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "Model",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Origin",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Origin",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "AzureSqlTable1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Parquet1",
 						"type": "DatasetReference"
 					}
 				]
