@@ -1,0 +1,16 @@
+{
+	"name": "Source",
+	"properties": {
+		"type": "Managed",
+		"typeProperties": {
+			"computeProperties": {
+				"location": "North Central US",
+				"dataFlowProperties": {
+					"computeType": "General",
+					"coreCount": 8,
+					"timeToLive": 10
+				}
+			}
+		}
+	}
+}

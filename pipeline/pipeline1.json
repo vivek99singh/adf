@@ -1,0 +1,157 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy",
+				"description": "Copy data from blob storage to database",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "test//cars.csv"
+					},
+					{
+						"name": "Destination",
+						"value": "dbo.cars"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"tableOption": "autoCreate"
+					},
+					"enableStaging": false,
+					"enableSkipIncompatibleRow": true,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Car",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Car",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "MPG",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MPG",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "Cylinders",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Cylinders",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Displacement",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Displacement",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "Horsepower",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Horsepower",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "Weight",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Weight",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "Acceleration",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Acceleration",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "Model",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Model",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Origin",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Origin",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AzureSqlTable1",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": []
+	}
+}
