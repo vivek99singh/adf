@@ -1,0 +1,60 @@
+{
+	"name": "AzureSqlTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Azuretestdestsqldb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Car",
+				"type": "varchar"
+			},
+			{
+				"name": "MPG",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Cylinders",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Displacement",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Horsepower",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Weight",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Acceleration",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Model",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Origin",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "cars"
+		}
+	}
+}
