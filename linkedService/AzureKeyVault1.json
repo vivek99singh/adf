@@ -4,7 +4,7 @@
 		"annotations": [],
 		"type": "AzureKeyVault",
 		"typeProperties": {
-			"baseUrl": "https://tstazurekeyvault.vault.azure.net/secrets/teststorageaccount/9c846ae5436341729e52245543a08438"
+			"baseUrl": "https://tstazurekeyvault.vault.azure.net/"
 		}
 	}
 }
