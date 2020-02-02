@@ -14,6 +14,10 @@
 		"Azuretestdestsqldb_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'Azuretestdestsqldb'"
+		},
+		"AzureBlobStorage2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage2'"
 		}
 	},
 	"variables": {
@@ -27,7 +31,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy",
+						"name": "Copy_from_blob_db",
 						"description": "Copy data from blob storage to database",
 						"type": "Copy",
 						"dependsOn": [],
@@ -176,13 +180,165 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy_from_blob_db",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "dbo.cars"
+							},
+							{
+								"name": "Destination",
+								"value": "test//"
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00"
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Car",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Car",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MPG",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "MPG",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "Cylinders",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Cylinders",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Displacement",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "Displacement",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "Horsepower",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "Horsepower",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "Weight",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "Weight",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "Acceleration",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "Acceleration",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "Model",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Model",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Origin",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Origin",
+											"type": "String"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "AzureSqlTable1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Parquet1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
 					}
 				],
 				"annotations": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]",
-				"[concat(variables('factoryId'), '/datasets/AzureSqlTable1')]"
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTable1')]",
+				"[concat(variables('factoryId'), '/datasets/Parquet1')]"
 			]
 		},
 		{
@@ -390,6 +546,49 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorage2_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "Destination",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/Destination')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "test"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage2')]"
+			]
 		}
 	]
 }

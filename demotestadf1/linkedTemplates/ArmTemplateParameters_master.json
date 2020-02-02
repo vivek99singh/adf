@@ -11,6 +11,9 @@
 		"Azuretestdestsqldb_connectionString": {
 			"value": ""
 		},
+		"AzureBlobStorage2_connectionString": {
+			"value": ""
+		},
 		"containerUri": {
 			"value": ""
 		},
