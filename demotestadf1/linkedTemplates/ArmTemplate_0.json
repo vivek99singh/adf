@@ -11,13 +11,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
 		},
-		"Azuretestdestsqldb_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'Azuretestdestsqldb'"
-		},
 		"AzureBlobStorage2_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage2'"
+		},
+		"Azuretestdestsqldb_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Azuretestdestsqldb'"
 		}
 	},
 	"variables": {
@@ -82,14 +82,14 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Azuretestdestsqldb')]",
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage2')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"type": "AzureSqlDatabase",
+				"type": "AzureBlobStorage",
 				"typeProperties": {
-					"connectionString": "[parameters('Azuretestdestsqldb_connectionString')]"
+					"connectionString": "[parameters('AzureBlobStorage2_connectionString')]"
 				},
 				"connectVia": {
 					"referenceName": "Destination",
@@ -101,14 +101,14 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage2')]",
+			"name": "[concat(parameters('factoryName'), '/Azuretestdestsqldb')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"type": "AzureBlobStorage",
+				"type": "AzureSqlDatabase",
 				"typeProperties": {
-					"connectionString": "[parameters('AzureBlobStorage2_connectionString')]"
+					"connectionString": "[parameters('Azuretestdestsqldb_connectionString')]"
 				},
 				"connectVia": {
 					"referenceName": "Destination",
@@ -265,7 +265,7 @@
 						"type": "AzureBlobStorageLocation",
 						"container": "test"
 					},
-					"compressionCodec": "snappy"
+					"compressionCodec": "gzip"
 				},
 				"schema": []
 			},
